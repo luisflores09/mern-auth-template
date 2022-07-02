@@ -4,12 +4,34 @@ const express = require("express");
 const userRouter = express.Router();
 const User = require("../models/user");
 
-userRouter.get("/login", (req, res) => {
-  res.render("login.ejs");
+userRouter.get("/login", async (req, res) => {
+  try {
+    res.render("login.ejs");
+  } catch (error) {
+    res.status(401).json({ message: `There has been an error` });
+  }
 });
 
-userRouter.get("/signup", (req, res) => {
-  res.render("signup.ejs");
+userRouter.get("/signup", async (req, res) => {
+  try {
+    res.render("signup.ejs");
+  } catch (error) {
+    res.status(401).json({ message: `There has been an error` });
+  }
+});
+
+userRouter.post("/signup", async (req, res) => {
+  try {
+    //overwrite the user password with the hashed password, then pass that in to our database
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    req.body.password = hashedPassword;
+    User.create(req.body);
+    res.redirect('/users/login')
+  } catch (error) {
+    res.status(500).send(error);
+  }
+  console.log(req.body.password);
+  console.log(req.body);
 });
 
 userRouter.get("/logout", (req, res) => {
@@ -17,16 +39,6 @@ userRouter.get("/logout", (req, res) => {
 });
 
 // New (registration page)
-userRouter.post("/", (req, res) => {
-  //overwrite the user password with the hashed password, then pass that in to our database
-  req.body.password = bcrypt.hashSync(
-    req.body.password,
-    bcrypt.genSaltSync(10)
-  );
-  User.create(req.body, (error, createdUser) => {
-    res.send(createdUser);
-  });
-});
 
 // Create (registration route)
 

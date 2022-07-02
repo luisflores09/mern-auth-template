@@ -3,6 +3,7 @@ const express = require("express");
 const { default: mongoose } = require("mongoose");
 const app = express();
 require("dotenv").config();
+const bodyParser = require("body-parser");
 
 // Database Configuration
 mongoose.connect(process.env.DATABASE_URL, {
@@ -21,6 +22,7 @@ db.on("disconnected", () => console.log("MongoDB Disconnected"));
 // Middleware
 // Body parser middleware: gives us access to req.body
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Routes / Controllers
 const userController = require("./controllers/users");

@@ -13,5 +13,17 @@
         <a href="/users/signup">Signup</a>
         <a href="/users/logout">Logout</a>
     </nav>
+    <p>Please Enter a Username and Password to Login</p>
+    <form action="/users/login" method="POST" autocomplete="off">
+      <label for=""
+        >Username:
+        <input type="text" name="username" required /> </label
+      ><br />
+      <label for=""
+        >Password:
+        <input type="password" name="password" required /> </label
+      ><br />
+      <input type="submit" value="Login" />
+    </form>
 </body>
 </html>
